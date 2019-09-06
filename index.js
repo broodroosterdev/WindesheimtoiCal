@@ -4,13 +4,11 @@ const request = require('request');
 const moment = require('moment');
 classcode_pattern = new RegExp('^(?!.*\.\.)(?!.*\.$)[^\W][\w. -]{0,20}$')
 http.createServer(function(req, res) {
-    console.log(req.url);
     let klascode = req.url.replace('/', '');
     if(classcode_pattern.test(klascode)){res.end(); return;};
     const cal = ical({domain: 'windesheim.nl', name: klascode, timezone: 'Europe/Amsterdam'});
     var url = "http://api.windesheim.nl/api/klas/" + klascode + "/Les";
     request(url, function (error, response, body){
-            console.log(body);
             let data = JSON.parse(body);
             data.forEach((appointment) =>{
                 cal.createEvent({
