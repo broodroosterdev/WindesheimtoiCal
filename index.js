@@ -2,18 +2,21 @@ const ical = require('ical-generator');
 const http = require('http');
 const request = require('request');
 const moment = require('moment');
-const cal = ical({domain: 'github.com', name: 'my first iCal'});
-
+classcode_pattern = new RegExp('^(?!.*\.\.)(?!.*\.$)[^\W][\w. -]{0,20}$')
 http.createServer(function(req, res) {
+    console.log(req.url);
     let klascode = req.url.replace('/', '');
+    if(classcode_pattern.test(klascode)){res.end(); return;};
+    const cal = ical({domain: 'windesheim.nl', name: klascode, timezone: 'Europe/Amsterdam'});
     var url = "http://api.windesheim.nl/api/klas/" + klascode + "/Les";
-    request(url, function (error, response, body){ 
+    request(url, function (error, response, body){
+            console.log(body);
             let data = JSON.parse(body);
             data.forEach((appointment) =>{
                 cal.createEvent({
                     uid: appointment.id,
-                    start: moment.unix(appointment.starttijd / 1000).utcOffset("+02:00"),
-                    end: moment.unix(appointment.eindtijd / 1000).utcOffset("+02:00"),
+                    start: moment.unix(appointment.starttijd / 1000).subtract(2, 'hours'),
+                    end: moment.unix(appointment.eindtijd / 1000).subtract(2, 'hours'),
                     summary: appointment.commentaar,
                     location: appointment.lokaal,
                     organizer: appointment.klascode
