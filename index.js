@@ -11,7 +11,7 @@ http.createServer(function(req, res) {
             return;
         }
         if(classcode_pattern.test(classcode)){res.statusCode=404; res.end(); return;}
-        const cal = ical({domain: 'windesheim.nl', name: classcode, timezone: 'Europe/Amsterdam'});
+        const cal = ical({domain: 'broodrooster.dev', name: classcode, timezone: 'Europe/Amsterdam', url: `https://www.broodrooster.dev/windesheim/api/${klascode}`});
         var url = "http://api.windesheim.nl/api/klas/" + classcode + "/Les";
         request(url, function (error, response, body){
             if(error){
