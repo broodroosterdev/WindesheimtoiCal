@@ -4,12 +4,26 @@ const request = require('request');
 const moment = require('moment');
 classcode_pattern = new RegExp('^(?!.*\.\.)(?!.*\.$)[^\W][\w. -]{0,20}$')
 http.createServer(function(req, res) {
-    let klascode = req.url.replace('/', '');
-    if(classcode_pattern.test(klascode)){res.end(); return;}
-    const cal = ical({domain: 'windesheim.nl', name: klascode, timezone: 'Europe/Amsterdam'});
-    var url = "http://api.windesheim.nl/api/klas/" + klascode + "/Les";
-    request(url, function (error, response, body){
+    try{
+        let classcode = req.url.replace('/', '');
+        if(!classcode){
+            console.error("No classcode provided");
+            return;
+        }
+        if(classcode_pattern.test(classcode)){res.statusCode=404; res.end(); return;}
+        const cal = ical({domain: 'windesheim.nl', name: classcode, timezone: 'Europe/Amsterdam'});
+        var url = "http://api.windesheim.nl/api/klas/" + classcode + "/Les";
+        request(url, function (error, response, body){
+            if(error){
+                console.error(error);
+                return;
+            }
             let data = JSON.parse(body);
+            if(!data){
+                console.error("No rooster found for this classcode " + classcode);
+                return;
+                
+            }
             data.forEach((appointment) =>{
                 cal.createEvent({
                     uid: appointment.id,
@@ -20,8 +34,14 @@ http.createServer(function(req, res) {
                     organizer: appointment.klascode
                 });
             });
-            cal.serve(res);
+        cal.serve(res);
     })
+    }catch(error){
+        console.error(error)
+        res.statusCode = 404;
+        res.end();
+    }
+    
 }).listen(3000, '127.0.0.1', function() {
     console.log('Server running at http://127.0.0.1:3000/');
 });
