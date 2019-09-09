@@ -1,4 +1,3 @@
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A612ZSO)
 # WindesheimtoiCal
 [![CodeFactor](https://www.codefactor.io/repository/github/broodroosterdev/windesheimtoical/badge)](https://www.codefactor.io/repository/github/broodroosterdev/windesheimtoical)
 
