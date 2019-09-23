@@ -10,10 +10,48 @@ http.createServer(function(req, res) {
             console.error("No classcode provided");
             return;
         }
-        if(classcode_pattern.test(classcode)){res.statusCode=404; res.end(); return;}
-        const cal = ical({domain: 'broodrooster.dev', name: classcode, timezone: 'Europe/Amsterdam', url: `https://www.broodrooster.dev/windesheim/api/${klascode}`});
-        var url = "http://api.windesheim.nl/api/klas/" + classcode + "/Les";
-        request(url, function (error, response, body){
+        if(classcode_pattern.test(classcode)){
+            res.statusCode = 404;
+            res.end();
+            return;
+        }
+        if(classcode.startsWith("klas/")){
+            classcode = classcode.slice(5);
+            const cal = ical({
+                domain: 'broodrooster.dev',
+                name: classcode,
+                timezone: 'Europe/Amsterdam',
+                url: `https://www.broodrooster.dev/windesheim/api/klas/${classcode}`
+            });
+            var url = "http://api.windesheim.nl/api/klas/" + classcode + "/Les";
+        } else if(classcode.startsWith("vak/")){
+            classcode = classcode.slice(4);
+            const cal = ical({
+                domain: 'broodrooster.dev',
+                name: classcode,
+                timezone: 'Europe/Amsterdam',
+                url: `https://www.broodrooster.dev/windesheim/api/vak/${classcode}`
+            });
+            var url = "http://api.windesheim.nl/api/vak/" + classcode + "/Les";
+        } else if(classcode.startsWith("docent/")){
+            classcode = classcode.slice(7);
+            const cal = ical({
+                domain: 'broodrooster.dev',
+                name: classcode,
+                timezone: 'Europe/Amsterdam',
+                url: `https://www.broodrooster.dev/windesheim/api/docent/${classcode}`
+            });
+            var url = "http://api.windesheim.nl/api/docent/" + classcode + "/Les";
+        } else {
+            const cal = ical({
+                domain: 'broodrooster.dev',
+                name: classcode,
+                timezone: 'Europe/Amsterdam',
+                url: `https://www.broodrooster.dev/windesheim/api/${classcode}`
+            });
+            var url = "http://api.windesheim.nl/api/klas/" + classcode + "/Les";
+        }
+        request(url, function(error, response, body){
             if(error){
                 console.error(error);
                 return;
@@ -22,9 +60,8 @@ http.createServer(function(req, res) {
             if(!data){
                 console.error("No rooster found for this classcode " + classcode);
                 return;
-                
             }
-            data.forEach((appointment) =>{
+            data.forEach((appointment) => {
                 cal.createEvent({
                     uid: appointment.id,
                     start: moment.unix(appointment.starttijd / 1000).subtract(2, 'hours'),
@@ -34,14 +71,14 @@ http.createServer(function(req, res) {
                     organizer: appointment.klascode
                 });
             });
-        cal.serve(res);
-    })
-    }catch(error){
+            cal.serve(res);
+        })
+    } catch (error){
         console.error(error)
         res.statusCode = 404;
         res.end();
     }
-    
+
 }).listen(3000, '127.0.0.1', function() {
     console.log('Server running at http://127.0.0.1:3000/');
 });
