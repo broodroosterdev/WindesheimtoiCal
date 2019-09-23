@@ -2,6 +2,9 @@ const ical = require('ical-generator');
 const http = require('http');
 const request = require('request');
 const moment = require('moment');
+const baseApiUrl = "http://api.windesheim.nl/api";
+const iCalDomain = 'broodrooster.dev';
+const baseiCalUrl = 'https://www.broodrooster.dev/windesheim/api'
 classcode_pattern = new RegExp('^(?!.*\.\.)(?!.*\.$)[^\W][\w. -]{0,20}$')
 http.createServer(function(req, res) {
     try{
@@ -17,40 +20,26 @@ http.createServer(function(req, res) {
         }
         if(classcode.startsWith("klas/")){
             classcode = classcode.slice(5);
-            const cal = ical({
-                domain: 'broodrooster.dev',
-                name: classcode,
-                timezone: 'Europe/Amsterdam',
-                url: `https://www.broodrooster.dev/windesheim/api/klas/${classcode}`
-            });
-            var url = "http://api.windesheim.nl/api/klas/" + classcode + "/Les";
+            var url = baseApiUrl + "/klas/" + classcode + "/Les";
+			var iCalUrl = baseiCalUrl + "/klas/" + classcode;
         } else if(classcode.startsWith("vak/")){
             classcode = classcode.slice(4);
-            const cal = ical({
-                domain: 'broodrooster.dev',
-                name: classcode,
-                timezone: 'Europe/Amsterdam',
-                url: `https://www.broodrooster.dev/windesheim/api/vak/${classcode}`
-            });
-            var url = "http://api.windesheim.nl/api/vak/" + classcode + "/Les";
+            var url = baseApiUrl + "/vak/" + classcode + "/Les";
+			var iCalUrl = baseiCalUrl + "/vak/" + classcode;
         } else if(classcode.startsWith("docent/")){
             classcode = classcode.slice(7);
-            const cal = ical({
-                domain: 'broodrooster.dev',
-                name: classcode,
-                timezone: 'Europe/Amsterdam',
-                url: `https://www.broodrooster.dev/windesheim/api/docent/${classcode}`
-            });
-            var url = "http://api.windesheim.nl/api/docent/" + classcode + "/Les";
+            var url = baseApiUrl + "/docent/" + classcode + "/Les";
+			var iCalUrl = baseiCalUrl + "/docent/" + classcode;
         } else {
-            const cal = ical({
-                domain: 'broodrooster.dev',
-                name: classcode,
-                timezone: 'Europe/Amsterdam',
-                url: `https://www.broodrooster.dev/windesheim/api/${classcode}`
-            });
-            var url = "http://api.windesheim.nl/api/klas/" + classcode + "/Les";
+            var url = baseApiUrl + "/klas/" + classcode + "/Les";
+			var iCalUrl = baseiCalUrl + "/" + classcode;
         }
+		const cal = ical({
+            domain: 'broodrooster.dev',
+            name: classcode,
+            timezone: 'Europe/Amsterdam',
+			url: `${iCalUrl}`
+        });
         request(url, function(error, response, body){
             if(error){
                 console.error(error);
