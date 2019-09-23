@@ -21,7 +21,7 @@ Then, run the index.js file
 Lastly, open a webbrowser with the following address (replace CLASSCODE with your classcode)
 
 
-`http://127.0.0.1:3000/CLASSCODE` OR `http://127.0.0.1:3000/klas/CLASSCODE`
+`http://127.0.0.1:3000/CLASSCODE` or `http://127.0.0.1:3000/klas/CLASSCODE`
 
 A save prompt will open which you can use to either save the .ics file or import it into your favourite program!
 

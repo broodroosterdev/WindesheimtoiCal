@@ -73,7 +73,7 @@ http.createServer(function(req, res) {
             });
             cal.serve(res);
         })
-    } catch (error){
+    } catch(error){
         console.error(error)
         res.statusCode = 404;
         res.end();
