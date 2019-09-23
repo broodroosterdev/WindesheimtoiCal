@@ -35,7 +35,7 @@ http.createServer(function(req, res) {
             var iCalUrl = baseiCalUrl + "/" + classcode;
         }
         const cal = ical({
-            domain: 'broodrooster.dev',
+            domain: `${iCalDomain}`,
             name: classcode,
             timezone: 'Europe/Amsterdam',
             url: `${iCalUrl}`
