@@ -37,10 +37,10 @@ You can also use the following options for Subject or Teacher Schedule
 For docker usage use the following command to build your docker image
 
 
-`docker build -t <your username>/node-web-app .`
+`docker build -t <your username>/windesheimtoical .`
 
 
 After building your docker image use the following command to run the image
 
 
-`docker run -p 3000:3000 -d <your username>/node-web-app`
+`docker run -p 3000:3000 -d <your username>/windesheimtoical`
