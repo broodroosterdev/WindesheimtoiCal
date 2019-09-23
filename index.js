@@ -21,24 +21,24 @@ http.createServer(function(req, res) {
         if(classcode.startsWith("klas/")){
             classcode = classcode.slice(5);
             var url = baseApiUrl + "/klas/" + classcode + "/Les";
-			var iCalUrl = baseiCalUrl + "/klas/" + classcode;
+            var iCalUrl = baseiCalUrl + "/klas/" + classcode;
         } else if(classcode.startsWith("vak/")){
             classcode = classcode.slice(4);
             var url = baseApiUrl + "/vak/" + classcode + "/Les";
-			var iCalUrl = baseiCalUrl + "/vak/" + classcode;
+            var iCalUrl = baseiCalUrl + "/vak/" + classcode;
         } else if(classcode.startsWith("docent/")){
             classcode = classcode.slice(7);
             var url = baseApiUrl + "/docent/" + classcode + "/Les";
-			var iCalUrl = baseiCalUrl + "/docent/" + classcode;
+            var iCalUrl = baseiCalUrl + "/docent/" + classcode;
         } else {
             var url = baseApiUrl + "/klas/" + classcode + "/Les";
-			var iCalUrl = baseiCalUrl + "/" + classcode;
+            var iCalUrl = baseiCalUrl + "/" + classcode;
         }
-		const cal = ical({
+        const cal = ical({
             domain: 'broodrooster.dev',
             name: classcode,
             timezone: 'Europe/Amsterdam',
-			url: `${iCalUrl}`
+            url: `${iCalUrl}`
         });
         request(url, function(error, response, body){
             if(error){
