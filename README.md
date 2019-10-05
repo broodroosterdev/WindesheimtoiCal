@@ -3,7 +3,8 @@
 
 
  A node.js script which spawns a http server which returns a iCal file
-
+# Demo
+You can find a demo of this program on https://www.broodrooster.dev/windesheim/api/
 
 # Usage
 First, install all the needed dependencies
