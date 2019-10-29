@@ -55,7 +55,7 @@ http.createServer(function(req, res) {
                     uid: appointment.id,
                     start: moment.unix(appointment.starttijd / 1000).subtract(2, 'hours'),
                     end: moment.unix(appointment.eindtijd / 1000).subtract(2, 'hours'),
-                    summary: appointment.commentaar,
+                    summary: "TIJD KLOPT NIET. GEBRUIK WINDESHEIM APP " + appointment.commentaar,
                     location: appointment.lokaal,
                     organizer: appointment.klascode
                 });
