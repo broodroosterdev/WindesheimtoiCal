@@ -53,8 +53,8 @@ http.createServer(function(req, res) {
             data.forEach((appointment) => {
                 cal.createEvent({
                     uid: appointment.id,
-                    start: moment.unix(appointment.starttijd / 1000).subtract(2, 'hours'),
-                    end: moment.unix(appointment.eindtijd / 1000).subtract(2, 'hours'),
+                    start: moment.unix(appointment.starttijd / 1000).subtract(1, 'hours'),
+                    end: moment.unix(appointment.eindtijd / 1000).subtract(1, 'hours'),
                     summary: "TIJD KLOPT NIET. GEBRUIK WINDESHEIM APP " + appointment.commentaar,
                     location: appointment.lokaal,
                     organizer: appointment.klascode
