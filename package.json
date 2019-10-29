@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "ical-generator": "^1.8.1",
-    "ics": "^2.16.0",
     "moment": "^2.24.0",
     "request": "^2.88.0"
   }
