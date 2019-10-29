@@ -1,11 +1,18 @@
+process.env.TZ = 'Europe/Amsterdam';
 const ical = require('ical-generator');
 const http = require('http');
 const request = require('request');
 const moment = require('moment');
 const baseApiUrl = "http://api.windesheim.nl/api";
 const iCalDomain = 'broodrooster.dev';
-const baseiCalUrl = 'https://www.broodrooster.dev/windesheim/api'
-classcode_pattern = new RegExp('^(?!.*\.\.)(?!.*\.$)[^\W][\w. -]{0,20}$')
+const baseiCalUrl = 'https://www.broodrooster.dev/windesheim/api';
+classcode_pattern = new RegExp('^(?!.*\.\.)(?!.*\.$)[^\W][\w. -]{0,20}$');
+
+function getTimezoneOffset(date){
+  var offset = new Date(moment.unix(date)).getTimezoneOffset();
+  return offset;
+}
+
 http.createServer(function(req, res) {
     try{
         let classcode = req.url.replace('/', '');
@@ -47,15 +54,17 @@ http.createServer(function(req, res) {
             }
             let data = JSON.parse(body);
             if(!data){
-                console.error("No rooster found for this classcode " + classcode);
+                console.error("No schedule found for this classcode " + classcode);
                 return;
             }
             data.forEach((appointment) => {
+				var starttime = appointment.starttijd / 1000;
+				var endtime = appointment.eindtijd / 1000;
                 cal.createEvent({
                     uid: appointment.id,
-                    start: moment.unix(appointment.starttijd / 1000).subtract(1, 'hours'),
-                    end: moment.unix(appointment.eindtijd / 1000).subtract(1, 'hours'),
-                    summary: "TIJD KLOPT NIET. GEBRUIK WINDESHEIM APP " + appointment.commentaar,
+                    start: moment.unix(starttime).add(getTimezoneOffset(starttime), 'minutes'),
+                    end: moment.unix(endtime).add(getTimezoneOffset(endtime), 'minutes'),
+                    summary: appointment.commentaar,
                     location: appointment.lokaal,
                     organizer: appointment.klascode
                 });
